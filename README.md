@@ -27,4 +27,4 @@ $ vagrant up
 ## Usage
 You get generic ubuntu with Docker. Further configuration and setup is to be done manually for now.
 
-Default private network IP is `10.20.1.2`
+Private network IP is `10.20.1.2` by default.
