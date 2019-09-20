@@ -12,9 +12,9 @@ Autocomplete for docker
 
 ## Requirements
 * Vagrant 2.2
-* Vagrant Auto-network https://github.com/oscar-stack/vagrant-auto_network - provisioning will make attempt to install it automatically
+* VM Provider (e.g. VirtualBox)
 
-Tested with Virtual Box 6.0 on Windows
+Tested with VirtualBox 6.0 on Windows
 
 ## Installation
 
@@ -26,3 +26,5 @@ $ vagrant up
 
 ## Usage
 You get generic ubuntu with Docker. Further configuration and setup is to be done manually for now.
+
+Default private network IP is `10.20.1.2`
