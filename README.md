@@ -21,10 +21,16 @@ Tested with VirtualBox 6.0 on Windows
 ```
 $ git clone git@github.com:chaos-drone/docker-over-vagrant-ubuntu.git
 $ cd docker-over-vagrant-ubuntu
+
+# Create settings.yml file if you want to change some of the settings
+# cp settings.yaml.example settings.yaml
+
 $ vagrant up
 ```
 
 ## Usage
 You get generic ubuntu with Docker. Further configuration and setup is to be done manually for now.
+
+Use `settings.yaml` to change the settings for the virtual machine. You can copy the file from `settings.yaml.example`.
 
 Private network IP is `10.20.1.2` by default.
