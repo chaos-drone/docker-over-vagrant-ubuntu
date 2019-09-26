@@ -1,3 +1,7 @@
+# synced_folders:
+#   - ["/path/to/folder/on/host/1", "/path/to/mounth/to1"]
+#   - ["/path/to/folder/on/host/2", "/path/to/mounth/to2"]
+
 # memory: "2048"
 # name: "dockerVM"
 # box: "bento/ubuntu-18.04"
