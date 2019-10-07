@@ -23,12 +23,11 @@ Vagrant.configure("2") do |config|
 
   if settings.include? 'synced_folders' then
     settings['synced_folders'].each do |folder|
-
       if File.exists? File.expand_path(folder[0])
         config.vm.synced_folder folder[0], folder[1]
       else
-        config.vm.provision "shell",
-          inline: "echo \"Unable to mount #{folder[0]}. Please, check your synced_folders configuration in settings.yaml.\""
+        config.vm.provision "shell", run: "always",
+          inline: ">&2 echo \"Unable to mount #{folder[0]}. Please, check your synced_folders configuration in settings.yaml.\""
       end
     end
   end
