@@ -1,8 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# require 'json'
-
 defaultSettingsFilePath = File.expand_path(File.dirname(__FILE__) + '/defaults.yaml')
 userSettingsFilePath = File.expand_path(File.dirname(__FILE__) + '/settings.yaml')
 
