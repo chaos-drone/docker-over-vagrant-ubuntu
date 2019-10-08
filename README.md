@@ -1,6 +1,8 @@
 # docker-over-vagrant-ubuntu
 Vagrant file and a setup script for docker ready virtual machine with ubuntu.
 
+The goal of the project when ready is to allow to setup a running dockerized project just by adding few lines of configuration and executing `vagrant up`.
+
 ## The setup
 Ubuntu 18.04 generic  
 Docker  
