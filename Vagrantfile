@@ -32,5 +32,12 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  if File.exists? File.expand_path('UserConfigure.rb')
+    require File.expand_path('UserConfigure.rb')
+
+    userConfig = UserConfigure.new
+    userConfig.configure(config, settings)
+  end
+
   config.vm.provision "bootstrap", type: "shell", path: "bootstrap.sh"
 end

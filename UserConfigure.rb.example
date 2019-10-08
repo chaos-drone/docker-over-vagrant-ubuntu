@@ -1,0 +1,5 @@
+class UserConfigure
+    def configure(config, settings)
+        # Your configuration code here
+    end
+end

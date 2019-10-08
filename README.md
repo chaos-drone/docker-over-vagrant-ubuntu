@@ -35,4 +35,8 @@ Use `settings.yaml` for quick and straightforward configuration. Copy the file f
 
 `$ cp settings.yaml.example settings.yaml`
 
+You can also create `UserConfigure` class where you can levarage the full power of vagrant configuration and access the settigns values. Copy the example file `UserConfigure.rb.example`
+
+`$ cp UserConfigure.rb.example UserConfigure.rb`
+
 Private network IP is `10.20.1.2` by default.
