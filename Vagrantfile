@@ -1,10 +1,11 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-defaultSettingsFilePath = File.expand_path(File.dirname(__FILE__) + '/defaults.yaml')
-userSettingsFilePath = File.expand_path(File.dirname(__FILE__) + '/settings.yaml')
+defaultSettingsFilePath = File.expand_path(File.dirname(__FILE__) + '/settings/defaults.yaml')
+userSettingsFilePath = File.expand_path(File.dirname(__FILE__) + '/settings/settings.yaml')
+userConfigureClassPath = File.expand_path(File.dirname(__FILE__) + '/settings/UserConfigure.rb')
 
-require File.expand_path(File.dirname(__FILE__) + '/SettingsLoader.rb')
+require File.expand_path(File.dirname(__FILE__) + '/settings/SettingsLoader.rb')
 
 Vagrant.configure("2") do |config|
 
@@ -32,8 +33,8 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  if File.exists? File.expand_path('UserConfigure.rb')
-    require File.expand_path('UserConfigure.rb')
+  if File.exists? userConfigureClassPath
+    require userConfigureClassPath
 
     userConfig = UserConfigure.new
     userConfig.configure(config, settings)
