@@ -35,7 +35,7 @@ You get generic ubuntu with Docker. Further configuration and setup is to be don
 
 Use `settings.yaml` for quick and straightforward configuration. Copy the file from `settings.yaml.example`. Currently only the settings availble in the example file are configurable this way.
 
-`$ cp settings.yaml.example settings.yaml`
+`$ cp settings/settings.yaml.example settings/settings.yaml`
 
 You can also create `UserConfigure` class where you can levarage the full power of vagrant configuration and access the settigns values. Copy the example file `UserConfigure.rb.example`
 
