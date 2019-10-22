@@ -6,6 +6,7 @@ userSettingsFilePath = File.expand_path(File.dirname(__FILE__) + '/settings/sett
 userConfigureClassPath = File.expand_path(File.dirname(__FILE__) + '/settings/UserConfigure.rb')
 
 require File.expand_path(File.dirname(__FILE__) + '/settings/SettingsLoader.rb')
+require File.expand_path(File.dirname(__FILE__) + '/DockerProvisioner.rb')
 
 Vagrant.configure("2") do |config|
 
@@ -22,10 +23,14 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--memory", settings['memory']]
   end
 
+  DockerProvisioner.setup config
+
   if settings.include? 'synced_folders' then
     settings['synced_folders'].each do |folder|
       if File.exists? File.expand_path(folder[:from])
         config.vm.synced_folder folder[:from], folder[:to]
+
+        DockerProvisioner.lookForDocker(folder)
       else
         config.vm.provision "shell", run: "always",
           inline: ">&2 echo \"Unable to mount #{folder[:from]}. Please, check your synced_folders configuration in settings.yaml.\""

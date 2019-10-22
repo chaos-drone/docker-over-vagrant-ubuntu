@@ -24,8 +24,12 @@ class SettingsLoader
                             elsif key == 1
                                 [:to, value]
                             else
-                                $stderr.puts "Synced folders in settings.yaml currently don't support additional arguemnts"
-                                [key, value]
+                                if value.include?('docker') then
+                                    [:docker, value['docker']]
+                                else
+                                    $stderr.puts "Unkown synced folder argument. Check README.md file for more information."
+                                    [key, value]
+                                end
                             end
                         end
                     ]

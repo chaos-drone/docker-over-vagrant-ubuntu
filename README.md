@@ -31,14 +31,99 @@ $ vagrant up
 ```
 
 ## Usage
-You get generic ubuntu with Docker. Further configuration and setup is to be done manually for now.
 
-Use `settings.yaml` for quick and straightforward configuration. Copy the file from `settings.yaml.example`. Currently only the settings availble in the example file are configurable this way.
+Use `settings.yaml` for quick and straightforward configuration. Copy the file from `settings.yaml.example`. Only the settings availble in the example file are configurable in this file.
 
 `$ cp settings/settings.yaml.example settings/settings.yaml`
 
-You can also create `UserConfigure` class where you can levarage the full power of vagrant configuration and access the settigns values. Copy the example file `UserConfigure.rb.example`
+### Automatically build images and run containers
 
-`$ cp UserConfigure.rb.example UserConfigure.rb`
+If a `Dockerfile` is present in some of the synced forlders an image will be build and container will be started for this file. The tag of the image and the name of the container will be set to the mounth path. The mount path will be bind mounted to the container. The setup is looking for Dockerfile only on first level of the path.
+
+E.g. 
+
+```
+synced_folders:
+  - ["/host/path", "/mount/path"]
+```
+
+If there is a `Dockerfile` in the `/host/path` directory on the host machine then  an image will be build automatically and tagged with `mount-path`. After that container will be started with the same name. `/mount/path` will be bind mounted in the container with the same path.
+
+This is the default behaviour of the setup and here are examples of how to change this behavirour:
+
+* Disable all automatic actions
+
+```
+synced_folders:
+  - ["/host/path", "/mount/path", docker: false]
+```
+
+
+* Use custom image name and container name
+
+```
+synced_folders:
+  - ["/host/path", "/mount/path", docker: {
+      imageName: 'custom-name'
+  }]
+```
+
+* Disable bind mount the synced folder in the container
+
+```
+synced_folders:
+  - ["/host/path", "/mount/path", docker: {
+      bindMountSyncedFolder: [false]
+  }]
+```
+
+* Bind mount synced folder with different path
+
+```
+synced_folders:
+  - ["/host/path", "/mount/path", docker: {
+      bindMountSyncedFolder: [true, '/opt/project']
+  }]
+```
+
+* Disable the automatic image building
+
+```
+synced_folders:
+  - ["/host/path", "/mount/path", docker: {
+      build: [false]
+  }]
+```
+
+* Add arguments for image building
+
+```
+synced_folders:
+  - ["/host/path", "/mount/path", docker: {
+      build: [true, '-a', '--arg=1', '--arg=2']
+  }]
+```
+
+* Disable running the container automatically
+
+```
+synced_folders:
+  - ["/host/path", "/mount/path", docker: {
+      run: [false]
+  }]
+```
+
+* Add arguments for running the container
+
+```
+synced_folders:
+  - ["/host/path", "/mount/path", docker: {
+      run: [true, '-a', '--arg=1', '--arg=2']
+  }]
+```
+
+You can also create `UserConfigure` class in which you can levarage the full power of vagrant configuration and access the settings values. Automaic image building and container running is not available for synced folders cnfigured in this class. Copy the example file `UserConfigure.rb.example`
+
+`$ cp settings/UserConfigure.rb.example settings/UserConfigure.rb`
 
 Private network IP is `10.20.1.2` by default.
