@@ -21,6 +21,7 @@ class DockerProvisioner
             options['bindMountSyncedFolder'] ||= [true]
             options['build'] ||= [true]
             options['run'] ||= [true]
+            options['env'] ||= {}
 
             @config.vm.provision "docker", run: "always" do |d|
                 if should('build', options) then
@@ -36,6 +37,14 @@ class DockerProvisioner
                         mountPath ||= path
                         
                         runArgs.concat(' ', "-v #{path}:#{mountPath}")
+                    end
+
+                    options['env'].each do |name, value|
+                        if value.nil? 
+                            runArgs.concat(' ', "--env #{name}")
+                        else
+                            runArgs.concat(' ', "--env \"#{name}=#{value}\"")
+                        end
                     end
 
                     d.run options['imageName'],
