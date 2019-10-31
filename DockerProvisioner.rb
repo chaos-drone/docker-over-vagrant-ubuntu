@@ -18,16 +18,20 @@ class DockerProvisioner
 
             options['imageName'] ||= path.tr('/', '-').gsub!(/^-/, '')
 
+            options['bindMountSyncedFolder'] ||= [true]
+            options['build'] ||= [true]
+            options['run'] ||= [true]
+
             @config.vm.provision "docker", run: "always" do |d|
-                if should('build', options, true) then
+                if should('build', options) then
                     d.build_image path,
                         args: "-t #{options['imageName']}".concat(' ', getArgs('build', options))
                 end
 
-                if should('run', options, true) then
+                if should('run', options) then
                     runArgs = getArgs('run', options)
                     
-                    if should('bindMountSyncedFolder', options, true) then
+                    if should('bindMountSyncedFolder', options) then
                         mountPath = getArgs('bindMountSyncedFolder', options)
 
                         if mountPath.empty? then
@@ -43,12 +47,8 @@ class DockerProvisioner
             end
         end
 
-        def should(command, options, default)
-            if options.include?(command) then 
-                options[command][0]
-            else
-                default
-            end
+        def should(command, options)
+            options[command][0]
         end
 
         def getArgs(command, options)
