@@ -153,6 +153,24 @@ synced_folders:
   }]
 ```
 
+### Set environment variables for the container
+
+```
+synced_folders:
+  - ["/host/path", "/mount/path", docker: {
+      env: { FOO: 'bar' }
+  }]
+```
+
+The variable will be passed as an argument to the docker run command as `--env "FOO=bar"`
+
+```
+$ docker container exec <container-name> env
+...
+FOO=bar
+...
+```
+
 You can also create `UserConfigure` class in which you can levarage the full power of vagrant configuration and access the settings values. Automaic image building and container running is not available for synced folders cnfigured in this class. Copy the example file `UserConfigure.rb.example`
 
 `$ cp settings/UserConfigure.rb.example settings/UserConfigure.rb`
