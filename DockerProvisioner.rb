@@ -49,11 +49,7 @@ class DockerProvisioner
         end
 
         def getArgs(command, options)
-            if (options[command] && nil != options[command].at(1)) then
-                options[command][1..-1].join(' ')
-            else 
-                ''
-            end
+            options[command][1..-1].join(' ')
         end
     end
 end
