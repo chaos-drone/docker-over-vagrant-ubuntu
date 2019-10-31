@@ -32,12 +32,9 @@ class DockerProvisioner
                     runArgs = getArgs('run', options)
                     
                     if should('bindMountSyncedFolder', options) then
-                        mountPath = getArgs('bindMountSyncedFolder', options)
-
-                        if mountPath.empty? then
-                            mountPath = path
-                        end
-
+                        mountPath = options['bindMountSyncedFolder'][1]
+                        mountPath ||= path
+                        
                         runArgs.concat(' ', "-v #{path}:#{mountPath}")
                     end
 
