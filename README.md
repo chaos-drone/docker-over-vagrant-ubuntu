@@ -77,13 +77,44 @@ synced_folders:
   }]
 ```
 
-* Bind mount synced folder with different path
+* Bind mount synced folder to a different path
 
 ```
 synced_folders:
   - ["/host/path", "/mount/path", docker: {
       bindMountSyncedFolder: [true, '/opt/project']
   }]
+```
+
+* Bind mount path is also available as an environment variable in the running container
+
+```
+$ docker container exec <container-name> env
+...
+BIND_MOUNT_PATH=/opt/project
+BIND_MOUNT_PATH_VAR_NAME=BIND_MOUNT_PATH
+...
+```
+
+The variable name can be changed because the containerized app should not be coupled to this tool.
+
+```
+synced_folders:
+  - ["/host/path", "/mount/path", docker: {
+      bindMountSyncedFolder: [true, ~, 'MY_PROJECT_PATH']
+  }]
+```
+
+> Note the second element is '~', meaning the path remains unchanged.
+
+This will result in:
+```
+$ docker container exec <container-name> env
+...
+BIND_MOUNT_PATH=/opt/project
+BIND_MOUNT_PATH_VAR_NAME=MY_PROJECT_PATH
+MY_PROJECT_PATH=/opt/project
+...
 ```
 
 * Disable the automatic image building
