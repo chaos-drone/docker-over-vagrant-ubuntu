@@ -37,6 +37,15 @@ class DockerProvisioner
                         mountPath ||= path
                         
                         runArgs.concat(' ', "-v #{path}:#{mountPath}")
+
+                        runArgs.concat(' ', "--env \"BIND_MOUNT_PATH=#{mountPath}\"")
+
+                        if (options['bindMountSyncedFolder'][2]) then
+                            runArgs.concat(' ', "--env \"#{options['bindMountSyncedFolder'][2]}=#{mountPath}\"")
+                            runArgs.concat(' ', "--env \"BIND_MOUNT_PATH_VAR_NAME=#{options['bindMountSyncedFolder'][2]}\"")
+                        else
+                            runArgs.concat(' ', "--env \"BIND_MOUNT_PATH_VAR_NAME=BIND_MOUNT_PATH\"")
+                        end
                     end
 
                     options['env'].each do |name, value|
