@@ -10,7 +10,15 @@ Docker
 >managable with non root user  
 
 Docker Compose  
-Autocomplete for docker
+Autocomplete for docker  
+Automatically build image and run containers for `Dockerfile` in synced folders
+
+### Presets
+
+Box: `bento/ubuntu-18.04`  
+Private network IP: `10.20.1.2`  
+Memory: `2048 MB`  
+VM name: `dockerVM`  
 
 ## Requirements
 * Vagrant 2.2
@@ -171,8 +179,8 @@ FOO=bar
 ...
 ```
 
+## Configuring with `UserConfigure` class
+
 You can also create `UserConfigure` class in which you can levarage the full power of vagrant configuration and access the settings values. Automaic image building and container running is not available for synced folders cnfigured in this class. Copy the example file `UserConfigure.rb.example`
 
 `$ cp settings/UserConfigure.rb.example settings/UserConfigure.rb`
-
-Private network IP is `10.20.1.2` by default.
