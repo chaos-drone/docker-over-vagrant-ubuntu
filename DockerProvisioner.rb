@@ -1,10 +1,12 @@
 class DockerProvisioner
 
     @config
+    @outputLogger
 
     class << self
-        def setup(config)
+        def setup(config, outputLogger)
             @config = config
+            @outputLogger = outputLogger
         end
 
         def lookForDocker(folder)
@@ -19,8 +21,8 @@ class DockerProvisioner
             if File.exists?(expandedPath) then
                 false != folder[:docker] && self.addProvisioner(folder[:to], folder[:docker])
             else
-                @config.vm.provision "shell", run: "always",
-                    inline: "echo \"No docker file found in #{folder[:from]}\""
+                @outputLogger.log "Looked for \"#{expandedPath}\" but didn't found it. Docker provisioner will not be run for this synced folder.",
+                    ProvisionOutputLogger::LOG_STDERR
             end
         end
 
@@ -36,7 +38,7 @@ class DockerProvisioner
 
             @config.vm.provision "docker", run: "always" do |d|
                 if should('build', options) then
-                    buildArgs = getArgs('build', options);
+                    buildArgs = getArgs('build', options)
                     buildArgs.concat(' -t ', options['imageName'])
                     buildArgs.concat(' -f ', options['dockerfile'])
 
