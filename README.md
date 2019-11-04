@@ -161,6 +161,17 @@ synced_folders:
   }]
 ```
 
+* Custom `Dockerfile` file name
+
+```
+synced_folders:
+  - ["/host/path", "/mount/path", docker: {
+      dockerfile: 'MyDockerfile.local'
+  }]
+```
+
+> Currently there is a limitation that the file should be inside the synced folder or it's subdirectories. 
+
 ### Set environment variables for the container
 
 ```
