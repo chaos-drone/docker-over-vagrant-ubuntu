@@ -8,8 +8,19 @@ class DockerProvisioner
         end
 
         def lookForDocker(folder)
-            if File.exists?(File.expand_path(folder[:from] + '/Dockerfile')) then
+
+            folder[:docker]['dockerfile'] ||= 'Dockerfile'
+            localPath = folder[:from] + '/' + folder[:docker]['dockerfile']
+
+            folder[:docker]['dockerfile'].prepend(folder[:to], '/')
+            
+            expandedPath = File.expand_path(localPath)
+
+            if File.exists?(expandedPath) then
                 false != folder[:docker] && self.addProvisioner(folder[:to], folder[:docker])
+            else
+                @config.vm.provision "shell", run: "always",
+                    inline: "echo \"No docker file found in #{folder[:from]}\""
             end
         end
 
@@ -25,8 +36,12 @@ class DockerProvisioner
 
             @config.vm.provision "docker", run: "always" do |d|
                 if should('build', options) then
+                    buildArgs = getArgs('build', options);
+                    buildArgs.concat(' -t ', options['imageName'])
+                    buildArgs.concat(' -f ', options['dockerfile'])
+
                     d.build_image path,
-                        args: "-t #{options['imageName']}".concat(' ', getArgs('build', options))
+                        args: buildArgs
                 end
 
                 if should('run', options) then
