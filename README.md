@@ -190,6 +190,25 @@ FOO=bar
 ...
 ```
 
+### Running container from the same image with different settings
+
+This is currently possible through a simple workarund
+
+```
+synced_folders:
+  - ["/host/path", "/mount/path-bar", docker: {
+      run: [true, "-p 80:8000"]
+      env: { FOO: 'bar' }
+  }]
+
+  - ["/host/path", "/mount/path-baz", docker: {
+      run: [true, "-p 81:8000"]
+      env: { FOO: 'baz' }
+  }]
+```
+
+This will result in having two image repositories with the same image ID and a separate container runnign for each one of them.
+
 ## Configuring with `UserConfigure` class
 
 You can also create `UserConfigure` class in which you can levarage the full power of vagrant configuration and access the settings values. Automaic image building and container running is not available for synced folders cnfigured in this class. Copy the example file `UserConfigure.rb.example`
