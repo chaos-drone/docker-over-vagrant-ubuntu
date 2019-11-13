@@ -10,6 +10,7 @@ class DockerProvisioner
         end
 
         def lookForDocker(folder)
+            return if false == folder[:docker]
 
             folder[:docker]['dockerfile'] ||= 'Dockerfile'
             localPath = folder[:from] + '/' + folder[:docker]['dockerfile']
@@ -19,7 +20,7 @@ class DockerProvisioner
             expandedPath = File.expand_path(localPath)
 
             if File.exists?(expandedPath) then
-                false != folder[:docker] && self.addProvisioner(folder[:to], folder[:docker])
+                self.addProvisioner(folder[:to], folder[:docker])
             else
                 @outputLogger.log "Looked for \"#{expandedPath}\" but didn't found it. Docker provisioner will not be run for this synced folder.",
                     ProvisionOutputLogger::LOG_STDERR
