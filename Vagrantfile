@@ -27,16 +27,14 @@ Vagrant.configure("2") do |config|
   outputLogger = ProvisionOutputLogger.new(config.vm)
   DockerProvisioner.setup(config, outputLogger)
 
-  if settings.include? 'synced_folders' then
-    settings['synced_folders'].each do |folder|
-      if File.exists? File.expand_path(folder[:from])
-        config.vm.synced_folder folder[:from], folder[:to]
+  settings['synced_folders'].each do |folder|
+    if File.exists? File.expand_path(folder[:from])
+      config.vm.synced_folder folder[:from], folder[:to]
 
-        DockerProvisioner.lookForDocker(folder)
-      else
-        outputLogger.log "Unable to mount #{folder[:from]}. Please, check your synced_folders configuration in settings.yaml.",
-          ProvisionOutputLogger::LOG_STDERR
-      end
+      DockerProvisioner.lookForDocker(folder)
+    else
+      outputLogger.log "Unable to mount #{folder[:from]}. Please, check your synced_folders configuration in settings.yaml.",
+        ProvisionOutputLogger::LOG_STDERR
     end
   end
 
