@@ -46,7 +46,7 @@ Use `settings.yaml` for quick and straightforward configuration. Copy the file f
 
 ### Automatically build images and run containers
 
-If a `Dockerfile` is present in some of the synced forlders an image will be build and container will be started for this file. The tag of the image and the name of the container will be set to the mounth path. The mount path will be bind mounted to the container. The setup is looking for Dockerfile only on first level of the path.
+If a `Dockerfile` is present in some of the synced forlders an image will be build and container will be started for this file. The tag of the image and the name of the container will be set to the mounth path. The mount path will be bind mounted to the container. Default restart policy for containers is `on-failure`. The setup is looking for Dockerfile only on first level of the path.
 
 E.g. 
 
