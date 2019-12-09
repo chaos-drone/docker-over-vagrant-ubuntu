@@ -12,6 +12,7 @@ class DockerProvisioner
         def lookForDocker(folder)
             return if false == folder[:docker]
 
+            folder[:docker] ||= {}
             folder[:docker]['dockerfile'] ||= 'Dockerfile'
             localPath = folder[:from] + '/' + folder[:docker]['dockerfile']
 
@@ -50,6 +51,10 @@ class DockerProvisioner
                 if should('run', options) then
                     runArgs = getArgs('run', options)
                     
+                    runArgs += ' --restart=on-failure' unless 
+                        runArgs.downcase().include?('--restart') unless
+                            runArgs.downcase().include?('--rm')
+                    
                     if should('bindMountSyncedFolder', options) then
                         mountPath = options['bindMountSyncedFolder'][1]
                         mountPath ||= path
@@ -75,7 +80,8 @@ class DockerProvisioner
                     end
 
                     d.run options['imageName'],
-                        args: runArgs
+                        args: runArgs,
+                        restart: 'no'
                 end
             end
         end
