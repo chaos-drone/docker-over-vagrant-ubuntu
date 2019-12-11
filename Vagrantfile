@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
   end
 
   outputLogger = ProvisionOutputLogger.new(config.vm)
-  DockerProvisioner.setup(config, outputLogger)
+  dockerProvisioner = DockerProvisioner.new(config.vm, outputLogger)
   dockerComposeProvisioner = DockerComposeProvisioner.new(config.vm)
 
   existantSyncedFoldres = settings['synced_folders'].select do |folder| 
@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
 
   existantSyncedFoldres.each do |folder|
       config.vm.synced_folder folder[:from], folder[:to]
-      DockerProvisioner.lookForDocker(folder)
+      dockerProvisioner.engage(folder) unless dockerProvisioner.forbid?(folder)
       dockerComposeProvisioner.engage(folder) unless dockerComposeProvisioner.forbid?(folder)
   end
 
