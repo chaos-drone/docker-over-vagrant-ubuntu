@@ -8,6 +8,7 @@ userConfigureClassPath = File.expand_path(File.dirname(__FILE__) + '/settings/Us
 require File.expand_path(File.dirname(__FILE__) + '/settings/SettingsLoader.rb')
 require File.expand_path(File.dirname(__FILE__) + '/ProvisionOutputLogger.rb')
 require File.expand_path(File.dirname(__FILE__) + '/DockerProvisioner.rb')
+require File.expand_path(File.dirname(__FILE__) + '/DockerComposeProvisioner.rb')
 
 Vagrant.configure("2") do |config|
 
@@ -26,12 +27,14 @@ Vagrant.configure("2") do |config|
 
   outputLogger = ProvisionOutputLogger.new(config.vm)
   DockerProvisioner.setup(config, outputLogger)
+  dockerComposeProvisioner = DockerComposeProvisioner.new(config.vm)
 
   settings['synced_folders'].each do |folder|
     if File.exists? File.expand_path(folder[:from])
       config.vm.synced_folder folder[:from], folder[:to]
 
       DockerProvisioner.lookForDocker(folder)
+      dockerComposeProvisioner.engage(folder) unless dockerComposeProvisioner.forbid?(folder)
     else
       outputLogger.log "Unable to mount #{folder[:from]}. Please, check your synced_folders configuration in settings.yaml.",
         ProvisionOutputLogger::LOG_STDERR
