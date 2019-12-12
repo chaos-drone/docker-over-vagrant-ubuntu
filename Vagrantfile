@@ -5,10 +5,10 @@ defaultSettingsFilePath = File.expand_path(File.dirname(__FILE__) + '/settings/d
 userSettingsFilePath = File.expand_path(File.dirname(__FILE__) + '/settings/settings.yaml')
 userConfigureClassPath = File.expand_path(File.dirname(__FILE__) + '/settings/UserConfigure.rb')
 
-require File.expand_path(File.dirname(__FILE__) + '/settings/SettingsLoader.rb')
-require File.expand_path(File.dirname(__FILE__) + '/ProvisionOutputLogger.rb')
-require File.expand_path(File.dirname(__FILE__) + '/DockerProvisioner.rb')
-require File.expand_path(File.dirname(__FILE__) + '/DockerComposeProvisioner.rb')
+require File.expand_path(File.dirname(__FILE__) + '/lib/SettingsLoader.rb')
+require File.expand_path(File.dirname(__FILE__) + '/lib/ProvisionOutputLogger.rb')
+require File.expand_path(File.dirname(__FILE__) + '/lib/DockerTrigger.rb')
+require File.expand_path(File.dirname(__FILE__) + '/lib/DockerComposeTrigger.rb')
 
 Vagrant.configure("2") do |config|
 
@@ -26,8 +26,8 @@ Vagrant.configure("2") do |config|
   end
 
   outputLogger = ProvisionOutputLogger.new(config.vm)
-  dockerProvisioner = DockerProvisioner.new(config.vm, outputLogger)
-  dockerComposeProvisioner = DockerComposeProvisioner.new(config.vm)
+  dockerTrigger = DockerTrigger.new(config.vm, outputLogger)
+  dockerComposeTrigger = DockerComposeTrigger.new(config.vm)
 
   existantSyncedFoldres = settings['synced_folders'].select do |folder| 
     File.exists? File.expand_path(folder[:from])
@@ -35,8 +35,8 @@ Vagrant.configure("2") do |config|
 
   existantSyncedFoldres.each do |folder|
       config.vm.synced_folder folder[:from], folder[:to]
-      dockerProvisioner.engage(folder) unless dockerProvisioner.forbid?(folder)
-      dockerComposeProvisioner.engage(folder) unless dockerComposeProvisioner.forbid?(folder)
+      dockerTrigger.engage(folder) unless dockerTrigger.forbid?(folder)
+      dockerComposeTrigger.engage(folder) unless dockerComposeTrigger.forbid?(folder)
   end
 
   nonExistantSyncedFoldres = settings['synced_folders'] - existantSyncedFoldres

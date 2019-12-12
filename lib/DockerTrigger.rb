@@ -1,4 +1,4 @@
-class DockerProvisioner
+class DockerTrigger
 
     @outputLogger
     @vm

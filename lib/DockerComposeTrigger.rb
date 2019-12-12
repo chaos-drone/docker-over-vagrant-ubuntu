@@ -1,4 +1,4 @@
-class DockerComposeProvisioner
+class DockerComposeTrigger
     
     @vm
 
