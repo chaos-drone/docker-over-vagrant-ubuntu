@@ -11,27 +11,15 @@ class DockerProvisioner
     def forbid?(folder)
         return if false == folder[:docker]
 
-        dockerFile = folder.fetch(:docker, {}).fetch('dockerfile', 'Dockerfile')
-        localPath = folder[:from] + '/' + dockerFile
+        localPath = folder[:from] + folder[:docker]['dockerfile'].sub(folder[:to], '')
         expandedPath = File.expand_path(localPath)
-
+        
         !File.exists?(expandedPath)
     end
 
     def engage(folder)
         path = folder[:to]
-
-        folder[:docker] ||= {}
-        folder[:docker]['dockerfile'] ||= 'Dockerfile'
-
         options = folder[:docker]
-
-        options['imageName'] ||= path.tr('/', '-').gsub!(/^-/, '')
-
-        options['bindMountSyncedFolder'] ||= [true]
-        options['build'] ||= [true]
-        options['run'] ||= [true]
-        options['env'] ||= {}
 
         @vm.provision "docker", run: "always" do |d|
             if should('build', options) then

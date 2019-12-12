@@ -19,21 +19,30 @@ class SettingsLoader
             @settings['synced_folders'] ||= []
 
             @settings['synced_folders'].map!.with_index do |folder, i|
-                Hash[
-                    folder.map.with_index do |value, key|
-                        if key == 0
-                            [:from, value]
-                        elsif key == 1
-                            [:to, value]
-                        else
-                            if value.include?('docker') then
-                                [:docker, value['docker']]
-                            else
-                                $stderr.puts "Unkown synced folder argument. Check README.md file for more information."
-                                [key, value]
-                            end
-                        end
+                docker = {}
+                folder.each do |value|
+                    if value.include?('docker') then
+                        docker = value['docker']
                     end
+                end
+
+                pathFrom = folder[0]
+                pathTo = folder[1]
+                
+                unless false == docker then
+                    docker['dockerfile'] ||= 'Dockerfile'
+                    docker['dockerfile'].prepend(pathTo, '/')
+                    docker['imageName'] ||= pathTo.tr('/', '-').gsub!(/^-/, '')
+                    docker['bindMountSyncedFolder'] ||= [true]
+                    docker['build'] ||= [true]
+                    docker['run'] ||= [true]
+                    docker['env'] ||= {}
+                end
+
+                Hash[
+                    :from => pathFrom, 
+                    :to => pathTo,
+                    :docker => docker
                 ]
             end
         else
