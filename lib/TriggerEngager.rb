@@ -18,7 +18,9 @@ class TriggerEngager
         localPath = folder[:from] + folder[:docker]['dockerfile'].sub(folder[:to], '')
         expandedPath = File.expand_path(localPath)
         
-        File.exists?(expandedPath)
+        engageable = File.exists?(expandedPath)
+
+        engageable && !isDockerComposeTriggerEngageable?(folder)
     end
 
     def isDockerComposeTriggerEngageable?(folder)
