@@ -9,6 +9,7 @@ require File.expand_path(File.dirname(__FILE__) + '/lib/SettingsLoader.rb')
 require File.expand_path(File.dirname(__FILE__) + '/lib/ProvisionOutputLogger.rb')
 require File.expand_path(File.dirname(__FILE__) + '/lib/DockerTrigger.rb')
 require File.expand_path(File.dirname(__FILE__) + '/lib/DockerComposeTrigger.rb')
+require File.expand_path(File.dirname(__FILE__) + '/lib/TriggerEngager.rb')
 
 Vagrant.configure("2") do |config|
 
@@ -28,6 +29,7 @@ Vagrant.configure("2") do |config|
   outputLogger = ProvisionOutputLogger.new(config.vm)
   dockerTrigger = DockerTrigger.new(config.vm, outputLogger)
   dockerComposeTrigger = DockerComposeTrigger.new(config.vm)
+  triggerEngager = TriggerEngager.new
 
   existantSyncedFoldres = settings['synced_folders'].select do |folder| 
     File.exists? File.expand_path(folder[:from])
@@ -35,8 +37,8 @@ Vagrant.configure("2") do |config|
 
   existantSyncedFoldres.each do |folder|
       config.vm.synced_folder folder[:from], folder[:to]
-      dockerTrigger.engage(folder) unless dockerTrigger.forbid?(folder)
-      dockerComposeTrigger.engage(folder) unless dockerComposeTrigger.forbid?(folder)
+      triggerEngager.engageDocker(dockerTrigger, folder)
+      triggerEngager.engageDockerCompose(dockerComposeTrigger, folder)
   end
 
   nonExistantSyncedFoldres = settings['synced_folders'] - existantSyncedFoldres

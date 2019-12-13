@@ -8,15 +8,6 @@ class DockerTrigger
         @vm = vm
     end
 
-    def forbid?(folder)
-        return if false == folder[:docker]
-
-        localPath = folder[:from] + folder[:docker]['dockerfile'].sub(folder[:to], '')
-        expandedPath = File.expand_path(localPath)
-        
-        !File.exists?(expandedPath)
-    end
-
     def engage(folder)
         path = folder[:to]
         options = folder[:docker]
