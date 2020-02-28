@@ -53,7 +53,10 @@ class DockerTrigger
                     end
                 end
 
-                d.run options['imageName'],
+                containerName = options['imageName'].tr(':', '-');
+
+                d.run containerName,
+                    image: options['imageName'],
                     args: runArgs,
                     restart: 'no'
             end
