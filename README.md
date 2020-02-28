@@ -33,7 +33,7 @@ $ git clone git@github.com:chaos-drone/docker-over-vagrant-ubuntu.git
 $ cd docker-over-vagrant-ubuntu
 
 # Create settings.yml file if you want to change some of the settings e.g. synced folders
-# cp settings.yaml.example settings.yaml
+# cp settings/settings.yaml.example settings/settings.yaml
 
 $ vagrant up
 ```
