@@ -29,7 +29,7 @@ Tested with VirtualBox 6.0 on Windows
 ## Installation
 
 ```
-$ git clone git@github.com:chaos-drone/docker-over-vagrant-ubuntu.git
+$ git clone git@github.com:devpetrov/docker-over-vagrant-ubuntu.git
 $ cd docker-over-vagrant-ubuntu
 
 # Create settings.yml file if you want to change some of the settings e.g. synced folders
